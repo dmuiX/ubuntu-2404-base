@@ -18,6 +18,8 @@ jobs:
         id: setup
         with:
           version: latest
+      - name: Install vagrant
+        run: sudo apt install vagrant
       - name: Packer Init
         run: packer init .
       - name: Packer Build - Branches
