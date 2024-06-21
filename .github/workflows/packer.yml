@@ -20,13 +20,17 @@ jobs:
         id: setup
         with:
           version: latest
-      - name: Install vagrant
+      - name: Install and setup vagrant
         run: |
           wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
           sudo apt-get update
           sudo apt-get install vagrant
           packer plugins install github.com/hashicorp/vagrant
+      - name: Install qemu
+        run: |
+          sudo apt-get update
+          sudo apt-get install qemu
       - name: Packer Init
         run: packer init .
       - name: Packer Build - Branches
