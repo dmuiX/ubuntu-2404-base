@@ -31,6 +31,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -y install bridge-utils cpu-checker libvirt-daemon-system
+      - name: Install cdcreation programm xorriso
+        run: |
+          sudo apt install xorriso
       - name: Packer Init
         run: packer init .
       - name: Packer Build - Branches
