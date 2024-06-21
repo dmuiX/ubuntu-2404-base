@@ -32,12 +32,13 @@ jobs:
           sudo apt-get update
           sudo apt-get -y install bridge-utils cpu-checker libvirt-daemon-system
       - name: Install cdcreation programm xorriso
-        run: |
-          sudo apt install xorriso
+        run: sudo apt-get install xorriso
+      - name: Check if kvm works
+        run: kvm-ok
       - name: Packer Init
         run: packer init .
       - name: Packer Build - Branches
-        run: packer build .
+        run: PACKER_LOG=1 packer build .
       - name: Packer Build - Branches
         run: packer validate .
 

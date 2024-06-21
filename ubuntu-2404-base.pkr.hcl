@@ -61,7 +61,7 @@ variable "hashed_password" {
   default = "$6$m0w41abFhAR6FqIx$1UkMR.gRPMO4HMLHr5wllojoUMOfW39QFxmvH8k9bKVwSoI3oS6PwqxwtNfqreXSqHYgU1uRUF5EJAGeivXy.."
 }
 
-variable "cloud_token" {
+variable "access_token" {
   type    = string
   default = "${env("VAGRANT_CLOUD_TOKEN")}"
 }
@@ -160,7 +160,7 @@ build {
   }
 
   post-processor "vagrant-cloud" {
-    access_token = "${var.cloud_token}"
+    access_token = "${var.access_token}"
     box_tag      = "dmuiX/${var.vm_name}.box"
     version      = "${var.version}"
     architecture = "${var.amd64}"
