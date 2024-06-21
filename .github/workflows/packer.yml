@@ -37,11 +37,13 @@ jobs:
         run: |
           sudo chown root:kvm /dev/kvm
           sudo usermod -G kvm $USER
+          sudo ls -als /dev/kvm
           kvm-ok
-      - name: Packer Init
-        run: packer init .
-      - name: Packer Build - Branches
-        run: PACKER_LOG=1 packer build .
-      - name: Packer Build - Branches
-        run: packer validate .
+          cat /etc/group | sort
+      # - name: Packer Init
+      #   run: packer init .
+      # - name: Packer Build - Branches
+      #   run: PACKER_LOG=1 packer build .
+      # - name: Packer Build - Branches
+      #   run: packer validate .
 
