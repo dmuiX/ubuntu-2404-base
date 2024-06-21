@@ -1,16 +1,25 @@
-name: Build ubuntu 2404 and upload to vagrant cloud
+name: Build ubuntu 2404 with packer and upload to vagrant cloud
 on:
   push:
     tags: ["v[0-9].[0-9]+.[0-9]+"]
     branches:
       - "main"
 jobs:
-  build-artifact:
+  packer:
     name: Build image and upload it to vagrant cloud
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: latest
       - name: Packer Init
         run: packer init .
       - name: Packer Build - Branches
-        if: "startsWith(github.ref, 'refs/heads/')"
         run: packer build .
+      - name: Packer Build - Branches
+        run: packer validate .
+
