@@ -1,0 +1,51 @@
+#cloud-config
+autoinstall:
+  version: 1
+  refresh-installer:
+    update: true
+  network:
+    version: 2
+    ethernets:
+      eth0:
+        dhcp4: true
+  updates: all
+  identity:
+    hostname: ubuntu-2404
+    username: vagrant
+    password: '$6$m0w41abFhAR6FqIx$1UkMR.gRPMO4HMLHr5wllojoUMOfW39QFxmvH8k9bKVwSoI3oS6PwqxwtNfqreXSqHYgU1uRUF5EJAGeivXy..' # vagrant
+  # storage:
+  #   swap:
+  #     size: 0
+  ssh:
+    install-server: true
+    allow-pw: yes
+    # authorized_keys: # Will install keys in initial user account!
+      # - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEjcB8a6z8NkRsFx8rQrLhelNIWylswX9f/xY+1nw81x nasadmin@omv'
+      # - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICW36PfNNkMOmj0Ph9W92Ni7DRTmWn0cjxk7mM/GEr84 daniel@MacBook-Air-M1.fritz.box'
+  package:
+    - qemu-guest-agent
+  user-data:
+    timezone: Europe/Berlin
+    # hostname: ubuntu-2404
+    disable_root: false
+    # package_update: true
+    # package_upgrade: true
+    # package_reboot_if_required: true
+    # users:
+      # - name: vagrant
+        # sudo: ALL=(ALL:ALL) NOPASSWD:ALL
+        # primary_group: vagrant
+        # shell: /bin/bash
+        # lock_passwd: false
+        # passwd: $6$m0w41abFhAR6FqIx$1UkMR.gRPMO4HMLHr5wllojoUMOfW39QFxmvH8k9bKVwSoI3oS6PwqxwtNfqreXSqHYgU1uRUF5EJAGeivXy..
+  # early-commands:
+  #   # Block inbound SSH to stop Packer trying to connect during initial install
+  #   - iptables -A INPUT -p tcp --dport 22 -j DROP
+  shutdown: reboot
+  late-commands:
+    # - sed -i 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers
+    # - sed -i 's/^#*\(send dhcp-client-identifier\).*$/\1 = hardware;/' /target/etc/dhcp/dhclient.conf
+    # - "echo 'Defaults:vagrant !requiretty' > /target/etc/sudoers.d/vagrant"
+    - "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /target/etc/sudoers.d/vagrant"
+    # - "chmod 440 /target/etc/sudoers.d/vagrant"
+    # - 'sed -i "s/dhcp4: true/&\n      dhcp-identifier: mac/" /target/etc/netplan/00-installer-config.yaml
