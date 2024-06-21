@@ -30,7 +30,7 @@ jobs:
       - name: Install qemu
         run: |
           sudo apt-get update
-          sudo apt-get -y install bridge-utils cpu-checker llibvirt-daemon-system
+          sudo apt-get -y install bridge-utils cpu-checker libvirt-daemon-system
       - name: Packer Init
         run: packer init .
       - name: Packer Build - Branches
