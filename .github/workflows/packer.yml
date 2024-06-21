@@ -10,6 +10,8 @@ jobs:
   packer:
     name: Build image and upload it to vagrant cloud
     runs-on: ubuntu-24.04
+    env:
+      VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
