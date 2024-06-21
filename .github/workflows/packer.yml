@@ -9,7 +9,7 @@ on:
 jobs:
   packer:
     name: Build image and upload it to vagrant cloud
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
         with:
           version: latest
       - name: Install vagrant
-        run: sudo apt install vagrant
+        run: sudo apt-get install vagrant
       - name: Packer Init
         run: packer init .
       - name: Packer Build - Branches
