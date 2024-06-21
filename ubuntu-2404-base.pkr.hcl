@@ -71,7 +71,7 @@ variable "version" {
   default = "1.0"
 }
 
-variable "amd" {
+variable "amd64" {
   type    = string
   default = "amd64"
 }
