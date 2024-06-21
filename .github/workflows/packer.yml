@@ -10,8 +10,6 @@ jobs:
   packer:
     name: Build image and upload it to vagrant cloud
     runs-on: ubuntu-24.04
-    env:
-      VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,30 +18,37 @@ jobs:
         id: setup
         with:
           version: latest
-      - name: Install and setup vagrant
-        run: |
-          wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-          sudo apt-get update
-          sudo apt-get install vagrant
-          packer plugins install github.com/hashicorp/vagrant
+      # - name: Install and setup vagrant
+      #   run: |
+      #     wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+      #     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+      #     sudo apt-get update
+      #     sudo apt-get install vagrant
+      #     packer plugins install github.com/hashicorp/vagrant
       - name: Install qemu
         run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
           sudo apt-get update
-          sudo apt-get -y install bridge-utils cpu-checker libvirt-daemon-system
+          sudo apt-get install -y libvirt-clients cpu-checker libvirt-daemon-system libvirt-daemon virtinst bridge-utils qemu-system-x86
+          sudo usermod -a -G kvm,libvirt $USER
       - name: Install cdcreation programm xorriso
         run: sudo apt-get install xorriso
       - name: Check if kvm works
         run: |
           sudo chown root:kvm /dev/kvm
-          sudo usermod -G kvm $USER
           sudo ls -als /dev/kvm
           kvm-ok
           cat /etc/group | sort
       # - name: Packer Init
       #   run: packer init .
       # - name: Packer Build - Branches
+      #   env:
+      #     VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
       #   run: PACKER_LOG=1 packer build .
       # - name: Packer Build - Branches
+      #   env:
+      #     VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
       #   run: packer validate .
 
